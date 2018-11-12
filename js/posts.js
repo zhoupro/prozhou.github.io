@@ -1,1 +1,1 @@
-[{"title":"blog","date":"2018.11.06","uri":"2018/11/06/blog/","excerpt":""}]
+[{"title":"blog purpose","date":"2018.11.06","uri":"2018/11/06/blog/","excerpt":""},{"title":"valgrind生成调用链","date":"2018.11.12","uri":"2018/11/12/valgrind生成调用链/","excerpt":""}]

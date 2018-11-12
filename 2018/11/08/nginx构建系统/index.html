@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>prozhou blog</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="nginx 构建系统分析问题 如何检测c编译器能正常工作 configure脚本是否为自动生成 生成makefile文件的方法  redis的makefile123456789101112131415161718192021222324252627282930OPTIMIZATION?=-O2ifeq ($(uname_S),SunOS)  CFLAGS?= -std=c99 -pedantic">
+<meta property="og:type" content="article">
+<meta property="og:title" content="prozhou blog">
+<meta property="og:url" content="http://yoursite.com/2018/11/08/nginx构建系统/index.html">
+<meta property="og:site_name" content="prozhou blog">
+<meta property="og:description" content="nginx 构建系统分析问题 如何检测c编译器能正常工作 configure脚本是否为自动生成 生成makefile文件的方法  redis的makefile123456789101112131415161718192021222324252627282930OPTIMIZATION?=-O2ifeq ($(uname_S),SunOS)  CFLAGS?= -std=c99 -pedantic">
+<meta property="og:locale" content="zh">
+<meta property="og:updated_time" content="2018-11-08T10:55:25.167Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="prozhou blog">
+<meta name="twitter:description" content="nginx 构建系统分析问题 如何检测c编译器能正常工作 configure脚本是否为自动生成 生成makefile文件的方法  redis的makefile123456789101112131415161718192021222324252627282930OPTIMIZATION?=-O2ifeq ($(uname_S),SunOS)  CFLAGS?= -std=c99 -pedantic">
+  
+  
+    <link rel="icon" href="/favicon.png">
+  
+  
+    
+  
+  <link rel="stylesheet" href="/css/style.css">
+  
+
+</head>
+</html>
+<body>
+  <div id="container">
+    <div id="wrap">
+      <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    
+    <div id="header-inner" class="inner">
+      <nav id="sub-nav">
+        
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="http://yoursite.com"></form>
+      </div>
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
+        
+          <a class="main-nav-link" href="/">首页</a>
+        
+          <a class="main-nav-link" href="/archives">归档</a>
+        
+          <a class="main-nav-link" href="/about">关于</a>
+        
+      </nav>
+      
+    </div>
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">prozhou blog</a>
+      </h1>
+      
+    </div>
+  </div>
+</header>
+      <div class="outer">
+        <section id="main"><article id="post-nginx构建系统" class="article article-type-post" itemscope="" itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/11/08/nginx构建系统/" class="article-date">
+  <time datetime="2018-11-08T10:55:25.167Z" itemprop="datePublished">2018-11-08</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <!-- Table of Contents -->
+        
+        <h1 id="nginx-构建系统分析"><a href="#nginx-构建系统分析" class="headerlink" title="nginx 构建系统分析"></a>nginx 构建系统分析</h1><h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ul>
+<li>如何检测c编译器能正常工作</li>
+<li>configure脚本是否为自动生成</li>
+<li>生成makefile文件的方法</li>
+</ul>
+<h2 id="redis的makefile"><a href="#redis的makefile" class="headerlink" title="redis的makefile"></a>redis的makefile</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">OPTIMIZATION?=-O2</span><br><span class="line">ifeq ($(uname_S),SunOS)</span><br><span class="line">  CFLAGS?= -std=c99 -pedantic $(OPTIMIZATION) -Wall -W -D__EXTENSIONS__ -D_XPG6</span><br><span class="line">  CCLINK?= -ldl -lnsl -lsocket -lm -lpthread</span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">  CFLAGS?= -std=c99 -pedantic $(OPTIMIZATION) -Wall -W $(ARCH) $(PROF)</span><br><span class="line">  CCLINK?= -lm -pthread</span><br><span class="line">endif</span><br><span class="line">CCOPT= $(CFLAGS) $(CCLINK) $(ARCH) $(PROF)</span><br><span class="line">DEBUG?= -g -rdynamic -ggdb </span><br><span class="line"></span><br><span class="line">OBJ = adlist.o ae.o anet.o dict.o redis.o sds.o zmalloc.o lzf_c.o lzf_d.o pqsort.o zipmap.o sha1.o ziplist.o release.o networking.o util.o object.o db.o replication.o rdb.o t_string.o t_list.o t_set.o t_zset.o t_hash.o config.o aof.o vm.o pubsub.o multi.o debug.o sort.o</span><br><span class="line"></span><br><span class="line">PRGNAME = redis-server</span><br><span class="line"></span><br><span class="line">all: redis-server</span><br><span class="line"></span><br><span class="line"><span class="comment"># Deps (use make dep to generate this)</span></span><br><span class="line">adlist.o: adlist.c adlist.h zmalloc.h</span><br><span class="line">ae.o: ae.c ae.h zmalloc.h config.h ae_kqueue.c</span><br><span class="line">ae_epoll.o: ae_epoll.c</span><br><span class="line"></span><br><span class="line">redis-server: $(OBJ)</span><br><span class="line">	$(CC) -o $(PRGNAME) $(CCOPT) $(DEBUG) $(OBJ)</span><br><span class="line">	@<span class="built_in">echo</span> <span class="string">""</span></span><br><span class="line">	@<span class="built_in">echo</span> <span class="string">"Hint: To run 'make test' is a good idea ;)"</span></span><br><span class="line">	@<span class="built_in">echo</span> <span class="string">""</span></span><br><span class="line"></span><br><span class="line">noopt:</span><br><span class="line">	make OPTIMIZATION=<span class="string">""</span></span><br></pre></td></tr></table></figure>
+<h2 id="gcc的示例"><a href="#gcc的示例" class="headerlink" title="gcc的示例"></a>gcc的示例</h2><p>大多数软件包遵守如下约定俗成的规范：</p>
+<ul>
+<li>1,首先从源代码生成目标文件(预处理,编译,汇编)，”-c”选项表示不执行链接步骤。<blockquote>
+<p>$(CC) $(CPPFLAGS) $(CFLAGS) example.c   -c   -o example.o</p>
+</blockquote>
+</li>
+<li>2,然后将目标文件连接为最终的结果(连接)，”-o”选项用于指定输出文件的名字。<blockquote>
+<p>$(CC) $(LDFLAGS) example.o   -o example</p>
+</blockquote>
+</li>
+<li>有一些软件包一次完成四个步骤：<blockquote>
+<p>$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) example.c   -o example</p>
+</blockquote>
+</li>
+</ul>
+<p>CFLAGS 与 CXXFLAGS<br>CFLAGS 表示用于 C 编译器的选项，CXXFLAGS 表示用于 C++ 编译器的选项。这两个变量实际上涵盖了编译和汇编两个步骤。大多数程序和库在编译时默认的优化级别是”2″(使用”-O2″选项)并且带有调试符号来编 译，也就是 CFLAGS=”-O2 -g”, CXXFLAGS=$CFLAGS 。事实上，”-O2″已经启用绝大多数安全的优化选项了。另一方面，由于大部分选项可以同时用于这两个变量，所以仅在最后讲述只能用于其中一个变量的选 项。[提醒]下面所列选项皆为非默认选项，你只要按需添加即可。</p>
+<p>LDFLAGS<br>ld用于指定链接时参数<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">CC=gcc</span><br><span class="line">CFLAGS=-Wall</span><br><span class="line">LDFLAGS=-lm</span><br><span class="line"></span><br><span class="line">.PHONY: all clean</span><br><span class="line"></span><br><span class="line">all: client</span><br><span class="line"></span><br><span class="line">clean:</span><br><span class="line">    $(RM) *~ *.o client</span><br><span class="line"></span><br><span class="line">    OBJECTS=client.o</span><br><span class="line">    client: $(OBJECTS)</span><br><span class="line">        $(CC) $(CFLAGS) $(OBJECTS) -o client $(LDFLAGS)</span><br></pre></td></tr></table></figure></p>
+<p>CFLAGS=”-I/usr/local/include” LDFLAGS=”-L/usr/local/lib”</p>
+<h2 id="redis的makefile总结"><a href="#redis的makefile总结" class="headerlink" title="redis的makefile总结"></a>redis的makefile总结</h2><h3 id="gcc的常用参数含义"><a href="#gcc的常用参数含义" class="headerlink" title="gcc的常用参数含义"></a>gcc的常用参数含义</h3><ul>
+<li>指定编译目标名称 -o</li>
+<li>指定标准 -std=c99</li>
+<li>优化级别 -O </li>
+<li>gcc报错  -pedantic   -Wall -W  </li>
+<li>编译  -c</li>
+<li>链接指定库 -lm -pthread</li>
+<li>调试 -g  -ggdb</li>
+<li>CFLAGS:c编译器参数  CXXFLAGS:c++编辑器参数 </li>
+<li>CPPFLAGS:c/c++预处理器参数</li>
+</ul>
+<h2 id="如何生成makefile文件"><a href="#如何生成makefile文件" class="headerlink" title="如何生成makefile文件"></a>如何生成makefile文件</h2><ul>
+<li>手写(redis)</li>
+<li>通过autoconf、automake生成</li>
+<li>自己开发工具生成(nginx)</li>
+</ul>
+
+      
+    </div>
+    <footer class="article-footer">
+      <a data-url="http://yoursite.com/2018/11/08/nginx构建系统/" data-id="cjo5fxeln0000hgs6mvn0gxfn" class="article-share-link">分享</a>
+      
+      
+      
+    </footer>
+  </div>
+  
+    
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
+    </div>
+  </div>
+
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/11/06/blog/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">blog purpose</div>
+    </a>
+  
+</nav>
+
+  
+</article>
+ 
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
+  
+
+</section>
+           
+    <aside id="sidebar">
+  
+    
+
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#nginx-构建系统分析"><span class="toc-number">1.</span> <span class="toc-text">nginx 构建系统分析</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#问题"><span class="toc-number">1.1.</span> <span class="toc-text">问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis的makefile"><span class="toc-number">1.2.</span> <span class="toc-text">redis的makefile</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#gcc的示例"><span class="toc-number">1.3.</span> <span class="toc-text">gcc的示例</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#redis的makefile总结"><span class="toc-number">1.4.</span> <span class="toc-text">redis的makefile总结</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#gcc的常用参数含义"><span class="toc-number">1.4.1.</span> <span class="toc-text">gcc的常用参数含义</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#如何生成makefile文件"><span class="toc-number">1.5.</span> <span class="toc-text">如何生成makefile文件</span></a></li></ol></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
+
+  
+    
+  
+    
+  
+    
+
+  
+</aside>
+
+      </div>
+      <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-left">
+      &copy; 2014 - 2018 prozhou&nbsp;|&nbsp;
+      主题 <a href="https://github.com/giscafer/hexo-theme-cafe/" target="_blank">Cafe</a>
+    </div>
+     <div id="footer-right">
+      联系方式&nbsp;|&nbsp;http://yoursite.com
+    </div>
+  </div>
+</footer>
+ <script src="/jquery/jquery.min.js"></script>
+    </div>
+    <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">首页</a>
+  
+    <a href="/archives" class="mobile-nav-link">归档</a>
+  
+    <a href="/about" class="mobile-nav-link">关于</a>
+  
+</nav>
+    <img class="back-to-top-btn" src="/images/fly-to-top.png">
+<script>
+// Elevator script included on the page, already.
+window.onload = function() {
+  var elevator = new Elevator({
+    selector:'.back-to-top-btn',
+    element: document.querySelector('.back-to-top-btn'),
+    duration: 1000 // milliseconds
+  });
+}
+</script>
+      
+
+  
+    <script>
+      var cloudTieConfig = {
+        url: document.location.href, 
+        sourceId: "",
+        productKey: "e2fb4051c49842688ce669e634bc983f",
+        target: "cloud-tie-wrapper"
+      };
+    </script>
+    <script src="https://img1.ws.126.net/f2e/tie/yun/sdk/loader.js"></script>
+    
+
+  
+
+
+
+
+
+
+
+<!-- author:forvoid begin -->
+<!-- author:forvoid begin -->
+
+<!-- author:forvoid end -->
+
+<!-- author:forvoid end -->
+
+
+  
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Config({
+        tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+          processEscapes: true,
+          skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+        }
+      })
+    </script>
+
+    <script type="text/x-mathjax-config">
+      MathJax.Hub.Queue(function() {
+        var all = MathJax.Hub.getAllJax(), i;
+        for (i=0; i < all.length; i += 1) {
+          all[i].SourceElement().parentNode.className += ' has-jax';
+        }
+      })
+    </script>
+    <script type="text/javascript" src="https://cdn.rawgit.com/mathjax/MathJax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+  
+
+
+ <script src="/js/is.js"></script>
+
+
+  <link rel="stylesheet" href="/fancybox/jquery.fancybox.css">
+  <script src="/fancybox/jquery.fancybox.pack.js"></script>
+
+
+<script src="/js/script.js"></script>
+<script src="/js/elevator.js"></script>
+  </div>
+</body>
+</html>

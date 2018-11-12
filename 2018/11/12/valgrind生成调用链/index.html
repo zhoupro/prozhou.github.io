@@ -3,15 +3,22 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>prozhou blog</title>
+  <title>valgrind生成调用链 | prozhou blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="prozhou blog">
-<meta property="og:url" content="http://yoursite.com/index.html">
+  <meta name="description" content="valgrind查看调用关系在学习开源代码时，我们希望有个工具能够给我们全局的视角而不过早的陷入细节的泥淖中。读书可以跳读，读代码也是可以跳读的。valgrind可以生成整个调用关系链。该关系链指导我们，迅速定位到我们关心的细节。 安装ubuntu系统12apt-get install valgrind apt-get install kcachegrind mac系统1brew install">
+<meta name="keywords" content="valgrind">
+<meta property="og:type" content="article">
+<meta property="og:title" content="valgrind生成调用链">
+<meta property="og:url" content="http://yoursite.com/2018/11/12/valgrind生成调用链/index.html">
 <meta property="og:site_name" content="prozhou blog">
+<meta property="og:description" content="valgrind查看调用关系在学习开源代码时，我们希望有个工具能够给我们全局的视角而不过早的陷入细节的泥淖中。读书可以跳读，读代码也是可以跳读的。valgrind可以生成整个调用关系链。该关系链指导我们，迅速定位到我们关心的细节。 安装ubuntu系统12apt-get install valgrind apt-get install kcachegrind mac系统1brew install">
 <meta property="og:locale" content="zh">
+<meta property="og:image" content="https://raw.githubusercontent.com/zhoupro/images/master/20181112/qcachegrind.png">
+<meta property="og:updated_time" content="2018-11-12T10:03:52.092Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="prozhou blog">
+<meta name="twitter:title" content="valgrind生成调用链">
+<meta name="twitter:description" content="valgrind查看调用关系在学习开源代码时，我们希望有个工具能够给我们全局的视角而不过早的陷入细节的泥淖中。读书可以跳读，读代码也是可以跳读的。valgrind可以生成整个调用关系链。该关系链指导我们，迅速定位到我们关心的细节。 安装ubuntu系统12apt-get install valgrind apt-get install kcachegrind mac系统1brew install">
+<meta name="twitter:image" content="https://raw.githubusercontent.com/zhoupro/images/master/20181112/qcachegrind.png">
   
   
     <link rel="icon" href="/favicon.png">
@@ -60,9 +67,7 @@
   </div>
 </header>
       <div class="outer">
-        <section id="main">
-  
-    <article id="post-valgrind生成调用链" class="article article-type-post" itemscope="" itemprop="blogPost">
+        <section id="main"><article id="post-valgrind生成调用链" class="article article-type-post" itemscope="" itemprop="blogPost">
   <div class="article-meta">
     <a href="/2018/11/12/valgrind生成调用链/" class="article-date">
   <time datetime="2018-11-12T09:54:57.000Z" itemprop="datePublished">2018-11-12</time>
@@ -79,8 +84,8 @@
       <header class="article-header">
         
   
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/12/valgrind生成调用链/">valgrind生成调用链</a>
+    <h1 class="article-title" itemprop="name">
+      valgrind生成调用链
     </h1>
   
 
@@ -114,57 +119,74 @@
     </footer>
   </div>
   
-</article>
- 
-
-
-  
-    <article id="post-blog" class="article article-type-post" itemscope="" itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2018/11/06/blog/" class="article-date">
-  <time datetime="2018-11-06T06:12:21.000Z" itemprop="datePublished">2018-11-06</time>
-</a>
     
-  <div class="article-category">
-    <a class="article-category-link" href="/categories/target/">target</a>►<a class="article-category-link" href="/categories/target/write/">write</a>
-  </div>
-
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2018/11/06/blog/">blog purpose</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <!-- Table of Contents -->
-        
-        <h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>从2014年开始就折腾自己的个人博客，断断续续，从现在开始使用github来写自己的个人博客，用来记录自己的学习过程，把博客和折腾分开。专心学习。</p>
-
-      
+ <script src="/jquery/jquery.min.js"></script>
+  <div id="random_posts">
+    <h2>推荐文章</h2>
+    <div class="random_posts_ul">
+      <script>
+          var random_count =4
+          var site = {BASE_URI:'/'};
+          function load_random_posts(obj) {
+              var arr=site.posts;
+              if (!obj) return;
+              // var count = $(obj).attr('data-count') || 6;
+              for (var i, tmp, n = arr.length; n; i = Math.floor(Math.random() * n), tmp = arr[--n], arr[n] = arr[i], arr[i] = tmp);
+              arr = arr.slice(0, random_count);
+              var html = '<ul>';
+            
+              for(var j=0;j<arr.length;j++){
+                var item=arr[j];
+                html += '<li><strong>' + 
+                item.date + ':&nbsp;&nbsp;<a href="' + (site.BASE_URI+item.uri) + '">' + 
+                (item.title || item.uri) + '</a></strong>';
+                if(item.excerpt){
+                  html +='<div class="post-excerpt">'+item.excerpt+'</div>';
+                }
+                html +='</li>';
+                
+              }
+              $(obj).html(html + '</ul>');
+          }
+          $('.random_posts_ul').each(function () {
+              var c = this;
+              if (!site.posts || !site.posts.length){
+                  $.getJSON(site.BASE_URI + 'js/posts.js',function(json){site.posts = json;load_random_posts(c)});
+              } 
+               else{
+                load_random_posts(c);
+              }
+          });
+      </script>
     </div>
-    <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/06/blog/" data-id="cjoe4zh8k0002bss6zsbumpa4" class="article-share-link">分享</a>
-      
-      
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/target/">target</a></li></ul>
-
-    </footer>
   </div>
+
+    
+<nav id="article-nav">
+  
+  
+    <a href="/2018/11/06/blog/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">下一篇</strong>
+      <div class="article-nav-title">blog purpose</div>
+    </a>
+  
+</nav>
+
   
 </article>
  
-
-
+     
+  <div class="comments" id="comments">
+    
+     
+       
+      <div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+    
+       
+      
+      
+  </div>
+ 
   
 
 </section>
@@ -172,70 +194,29 @@
     <aside id="sidebar">
   
     
-  <div class="widget-wrap">
-     
-        <h3 class="follow-title ">Follow me</h3>
-     
-    <div class="widget follow">
-      
-              <a class="github" aria-hidden="true" href="https://github.com/zhoupro" target="_blank" title="Github"></a>
-      
-      
-      
-      
-    </div>
-  </div>
 
+  
+    
+    <div class="widget-wrap">
+    
+      <div class="widget" id="toc-widget-fixed">
+      
+        <strong class="toc-title">文章目录</strong>
+        <div class="toc-widget-list">
+              <ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#valgrind查看调用关系"><span class="toc-number">1.</span> <span class="toc-text">valgrind查看调用关系</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-number">2.</span> <span class="toc-text">安装</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用"><span class="toc-number">3.</span> <span class="toc-text">使用</span></a></li></ol>
+          </div>
+      </div>
+    </div>
+
+  
+    
 
   
     
   
     
-  <div class="widget-wrap">
-    <h3 class="widget-title categories">分类</h3>
-    <div class="widget" id="categories">
-      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/target/">target</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/target/write/">write</a><span class="category-list-count">1</span></li></ul></li><li class="category-list-item"><a class="category-list-link" href="/categories/tool/">tool</a><span class="category-list-count">1</span><ul class="category-list-child"><li class="category-list-item"><a class="category-list-link" href="/categories/tool/profile/">profile</a><span class="category-list-count">1</span></li></ul></li></ul>
-    </div>
-  </div>
-
-
   
     
-  <div class="widget-wrap">
-    <h3 class="widget-title tagcloud">标签云</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/target/" style="font-size: 14px;">target</a> <a href="/tags/valgrind/" style="font-size: 14px;">valgrind</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title recent-posts">最新文章</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2018/11/12/valgrind生成调用链/">valgrind生成调用链</a>
-          </li>
-        
-          <li>
-            <a href="/2018/11/06/blog/">blog purpose</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title archive">归档</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">2</span></li></ul>
-    </div>
-  </div>
-
 
   
 </aside>
