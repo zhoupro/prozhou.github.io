@@ -3,16 +3,19 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>valgrind生成调用链 | prozhou blog</title>
+  <title>hexo-blog | prozhou blog</title>
   <meta name="author" content="prozhou">
   
-  <meta name="description" content="valgrind查看调用关系在学习开源代码时，我们希望有个工具能够给我们全局的视角而不过早的陷入细节的泥淖中。读书可以跳读，读代码也是可以跳读的。valgrind可以生成整个调用关系链。该关系链指导我们，迅速定位到我们关心的细节。
-安装ubuntu系统12apt-get install valgri">
+  <meta name="description" content="使用github page来托管我们的博客内容。文章的书写格式为markdown。使用hexo完成markdown到html的转换, 使用hexo deploy发布到github page上。
+相关名词
+markdown
+
+John Gruber在2004年发明了markdown, markdown">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="valgrind生成调用链">
+  <meta property="og:title" content="hexo-blog">
   <meta property="og:site_name" content="prozhou blog">
 
   
@@ -98,7 +101,7 @@
 
 	
 		<div class="page-header page-header-inverse ">		
-			<h1 class="title title-inverse "> valgrind生成调用链</h1>
+			<h1 class="title title-inverse "> hexo-blog</h1>
 		</div>		
 	
 
@@ -118,20 +121,57 @@
 	<div class="mypage">		
 	  		
 
-	  <h2 id="valgrind查看调用关系"><a href="#valgrind查看调用关系" class="headerlink" title="valgrind查看调用关系"></a>valgrind查看调用关系</h2><p>在学习开源代码时，我们希望有个工具能够给我们全局的视角而不过早的陷入细节的泥淖中。读书可以跳读，读代码也是可以跳读的。valgrind可以生成整个调用关系链。该关系链指导我们，迅速定位到我们关心的细节。</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>ubuntu系统<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get install valgrind </span><br><span class="line">apt-get install kcachegrind</span><br></pre></td></tr></table></figure></p>
-<p>mac系统<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install qcachegrind --with-graphviz</span><br></pre></td></tr></table></figure></p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><ul>
-<li>使用valgrind生成调用关系</li>
+	  <p>使用github page来托管我们的博客内容。文章的书写格式为markdown。使用hexo完成markdown到html的转换, 使用<code>hexo deploy</code><br>发布到github page上。</p>
+<h3 id="相关名词"><a href="#相关名词" class="headerlink" title="相关名词"></a>相关名词</h3><ul>
+<li><p>markdown</p>
+<blockquote>
+<p>John Gruber在2004年发明了markdown, markdown易写易读,使用工具可以方便的转换为html等格式。</p>
+</blockquote>
+</li>
+<li><p>github page</p>
+<blockquote>
+<p>github page提供静态页面服务, 程序员不仅可以分享代码, 还可以写技术文章。</p>
+</blockquote>
+</li>
+<li><p>hexo</p>
+<blockquote>
+<p>nodejs开发的工具，用来把markdown转换为html静态网站</p>
+</blockquote>
+</li>
 </ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">valgrind --tool=callgrind --trace-children=yes  --callgrind-out-file=/data/opt/callgrind.out.1111  ./nginx</span><br></pre></td></tr></table></figure>
+<h2 id="hexo安装步骤"><a href="#hexo安装步骤" class="headerlink" title="hexo安装步骤"></a>hexo安装步骤</h2><ul>
+<li>安装nodejs  <code>brew install nodejs</code></li>
+<li>安装hexo   <code>npm i -g hexo</code></li>
+<li>初始化根目录 <code>mkdir blog &amp;&amp; cd blog &amp;&amp; hexo init</code> </li>
+<li>安装git部署插件 <code>npm install hexo-deployer-git --save</code></li>
+<li><p>切换主题(可选) </p>
+<blockquote>
 <ul>
-<li>使用qcachegrind查看调用关系</li>
+<li><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/wzpan/hexo-theme-freemind.git themes/freemind &amp;&amp; \</span><br><span class="line">npm install hexo-tag-bootstrap --save &amp;&amp; \</span><br><span class="line">npm install hexo-generator-search --save &amp;&amp; \</span><br><span class="line">npm install hexo-recommended-posts --save</span><br></pre></td></tr></table></figure>
+</li>
 </ul>
-<p><img src="https://raw.githubusercontent.com/zhoupro/images/master/20181112/qcachegrind.png" alt="qcachegrind" title="qcachegrind"></p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ul>
-<li>Error: can not open cache simulation output file<br>保证写的目录有写的权限，可以创建一个目录，赋值为777，在该目录下启动命令<code>valgrind --tool=callgrind --trace-children=yes /data/server/nginx/sbin/nginx</code>, 使用kill终止程序<code>kill SIGINT pid</code></li>
+</blockquote>
+<ul>
+<li>修改_config.yml, 切换主题 <code>sed -i  &#39;s/^theme:.*/theme: freemind/g&#39; _config.yml</code></li>
 </ul>
+</li>
+</ul>
+<h2 id="hexo-使用步骤"><a href="#hexo-使用步骤" class="headerlink" title="hexo 使用步骤"></a>hexo 使用步骤</h2><h3 id="使用流程简述"><a href="#使用流程简述" class="headerlink" title="使用流程简述"></a>使用流程简述</h3><p>创建文章（正式文章或者草稿）， 使用markdown工具进行书写，书写完成后转换为html格式后进行发布。在书写工程中也可以在执行<code>hexo gen &amp;&amp; hexo server</code>后访问localhost:4000预览效果。</p>
+<h3 id="命令参考"><a href="#命令参考" class="headerlink" title="命令参考"></a>命令参考</h3><ul>
+<li>创建草稿 <code>hexo new draft  标题</code></li>
+<li>发布草稿成为正式文章 <code>hexo publish 标题</code></li>
+<li>创建正式文章 <code>hexo new   标题</code></li>
+<li>使用文本工具进行写作, 如使用vim编辑 <code>vim 标题</code></li>
+<li>转换markdown到静态文件 <code>hexo gen</code></li>
+<li>预览网站效果  <code>hexo server</code></li>
+<li>发布到github page <code>hexo deploy</code></li>
+<li>清空生成文件  <code>hexo clean</code></li>
+</ul>
+<h2 id="hexo部署方案"><a href="#hexo部署方案" class="headerlink" title="hexo部署方案"></a>hexo部署方案</h2><blockquote>
+<p>我希望markdown源文件和hexo生成的静态文件完全隔离。可以方便随时切换主题甚至工具，我只关心源markdown文件。所以设置两个仓库，一个保存hexo生成的html, 一个包含源markdown文件及配置文件。使用ln建立链接。算是linux下的kiss原则吧。我使用 <a href="https://github.com/zhoupro/blog" target="_blank" rel="noopener">blog</a> 和 <a href="https://github.com/zhoupro/zhoupro.github.io" target="_blank" rel="noopener">zhoupro.github.io</a>来搭建博客。</p>
+</blockquote>
+<h2 id="简化流程"><a href="#简化流程" class="headerlink" title="简化流程"></a>简化流程</h2><p><a href="https://github.com/zhoupro/blog" target="_blank" rel="noopener">blog</a>中的init.sh脚本把以上步骤自动化, 执行 <code>. ./init.sh</code>后直接写作即可。</p>
+<h2 id="图片处理"><a href="#图片处理" class="headerlink" title="图片处理"></a>图片处理</h2><p>参考<a href="https://gist.github.com/zhoupro/e09657196114420d63218ebe77079d05" target="_blank" rel="noopener">上传图片到github</a>，创建自己的github仓库，然后配置下脚本 <code>curl https://gist.githubusercontent.com/zhoupro/e09657196114420d63218ebe77079d05/raw/c6d3bd4d8d3dc342813ae37de4e3aed652f9ac30/sh -o genUrl.sh &amp;&amp;   bash genUrl.sh  yourpic</code>。你也可以上传到第三方服务，使用它们生成的链接。</p>
 	  
 	</div>
 
@@ -143,14 +183,14 @@
 	<div class="pagination">
 <ul class="pagination">
 	 
-				
-    	<li class="prev"><a href="/2018/11/13/使用hexo搭建博客/" class="alignleft prev"><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
-  		
+		
+          <li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+        
 
         <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
 
 		
-		   <li class="next"><a href="/2018/11/06/blog/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+		   <li class="next"><a href="/2018/11/12/valgrind生成调用链/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
         
 	
 </ul>
@@ -200,7 +240,7 @@
 		   no_comment: "No comments yet. Press the button and go to comment now!",
 		   go_to_comment: "Go to comment",
 		   no_issue: "no_issue",
-		   issue_title: "valgrind生成调用链",
+		   issue_title: "hexo-blog",
 		   issue_id: "",
 		   btn_class: "btn btn-primary",
 		   comments_target: "#comment-thread",
@@ -221,7 +261,7 @@
 	
 	<div class="meta-widget">
 	<i class="fa fa-clock-o"></i>
-	2018-11-12 
+	2018-11-13 
 	</div>
 	
 
@@ -245,7 +285,7 @@
 	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
     <ul id="tags" class="tag_box list-unstyled collapse in">	  
 	    
-  <li><a href="/tags/valgrind/">valgrind<span>1</span></a></li>
+  <li><a href="/tags/hexo/">hexo<span>1</span></a></li>
     </ul>
 	</div>
 	

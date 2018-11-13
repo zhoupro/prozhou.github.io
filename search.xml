@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title><![CDATA[使用hexo搭建博客]]></title>
+    <url>%2F2018%2F11%2F13%2F%E4%BD%BF%E7%94%A8hexo%E6%90%AD%E5%BB%BA%E5%8D%9A%E5%AE%A2%2F</url>
+    <content type="text"><![CDATA[使用github page来托管我们的博客内容。文章的书写格式为markdown。使用hexo完成markdown到html的转换, 使用hexo deploy发布到github page上。 相关名词 markdown John Gruber在2004年发明了markdown, markdown易写易读,使用工具可以方便的转换为html等格式。 github page github page提供静态页面服务, 程序员不仅可以分享代码, 还可以写技术文章。 hexo nodejs开发的工具，用来把markdown转换为html静态网站 hexo安装步骤 安装nodejs brew install nodejs 安装hexo npm i -g hexo 初始化根目录 mkdir blog &amp;&amp; cd blog &amp;&amp; hexo init 安装git部署插件 npm install hexo-deployer-git --save 切换主题(可选)1234git clone https://github.com/wzpan/hexo-theme-freemind.git themes/freemind &amp;&amp; \npm install hexo-tag-bootstrap --save &amp;&amp; \npm install hexo-generator-search --save &amp;&amp; \npm install hexo-recommended-posts --save 修改_config.yml, 切换主题 sed -i &#39;s/^theme:.*/theme: freemind/g&#39; _config.yml hexo 使用步骤创建文章（正式文章或者草稿，使用markdown工具进行书写，书写完成后转换为html格式后进行发布。在书写工程中也可以在执行hexo gen &amp;&amp; hexo server后访问localhost:4000预览效果。 命令参考 创建草稿 hexo new draft 标题 发布草稿成为正式文章 hexo publish 标题 创建正式文章 hexo new 标题 使用文本工具进行写作, 如使用vim编辑 vim 标题 转换markdown到静态文件 hexo gen 预览网站效果 hexo server 发布到github page hexo deploy 清空生成文件 hexo clean hexo部署方案我希望markdown源文件和hexo生成的静态文件完全隔离。可以方便随时切换主题甚至工具，我只关心源markdown文件。所以设置两个仓库，一个保存hexo生成的html, 一个包含源markdown文件及配置文件。使用ln建立链接。算是linux下的kiss原则吧。我使用 blog和zhoupro.github.io 来搭建博客。 简化流程blog中的init.sh脚本把以上步骤自动化, 执行 . ./init.sh后直接写作即可。 图片处理参考上传图片到github，创建自己的github仓库，然后配置下脚本 curl https://gist.githubusercontent.com/zhoupro/e09657196114420d63218ebe77079d05/raw/c6d3bd4d8d3dc342813ae37de4e3aed652f9ac30/sh -o genUrl.sh &amp;&amp; bash genUrl.sh yourpic。你也可以上传到第三方服务，使用它们生成的链接。]]></content>
+      <categories>
+        <category>工具</category>
+      </categories>
+      <tags>
+        <tag>hexo</tag>
+      </tags>
+  </entry>
+  <entry>
     <title><![CDATA[valgrind生成调用链]]></title>
     <url>%2F2018%2F11%2F12%2Fvalgrind%E7%94%9F%E6%88%90%E8%B0%83%E7%94%A8%E9%93%BE%2F</url>
     <content type="text"><![CDATA[valgrind查看调用关系在学习开源代码时，我们希望有个工具能够给我们全局的视角而不过早的陷入细节的泥淖中。读书可以跳读，读代码也是可以跳读的。valgrind可以生成整个调用关系链。该关系链指导我们，迅速定位到我们关心的细节。 安装ubuntu系统12apt-get install valgrind apt-get install kcachegrind mac系统1brew install qcachegrind --with-graphviz 使用 使用valgrind生成调用关系 1valgrind --tool=callgrind --trace-children=yes --callgrind-out-file=/data/opt/callgrind.out.1111 ./nginx 使用qcachegrind查看调用关系 问题 Error: can not open cache simulation output file保证写的目录有写的权限，可以创建一个目录，赋值为777，在该目录下启动命令valgrind --tool=callgrind --trace-children=yes /data/server/nginx/sbin/nginx, 使用kill终止程序kill SIGINT pid]]></content>
       <categories>
-        <category>code</category>
+        <category>工具</category>
       </categories>
       <tags>
         <tag>valgrind</tag>
@@ -16,10 +27,10 @@
     <url>%2F2018%2F11%2F06%2Fblog%2F</url>
     <content type="text"><![CDATA[目的从2014年开始就折腾自己的个人博客，断断续续，从现在开始使用github来写自己的个人博客，用来记录自己的学习过程，把博客和折腾分开。专心学习。]]></content>
       <categories>
-        <category>target</category>
+        <category>目标</category>
       </categories>
       <tags>
-        <tag>target</tag>
+        <tag>blog</tag>
       </tags>
   </entry>
 </search>

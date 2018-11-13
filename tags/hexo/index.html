@@ -3,7 +3,7 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>target | prozhou blog</title>
+  <title>hexo | prozhou blog</title>
   <meta name="author" content="prozhou">
   
   
@@ -94,7 +94,7 @@
 
 <!-- title -->
 <div class="page-header page-header-inverse ">
-  <h1 class="archive-title-category title title-inverse ">target</h1>
+  <h1 class="archive-title-tag title title-inverse ">hexo</h1>
 </div>
 
 <div class="row page">
@@ -113,8 +113,8 @@
 	
 	<!-- display as entry -->	
 		<h3 class="title">
-			<div class="date"> 2018-11-06 </div>
-			<div class="article-title"><a href="/2018/11/06/blog/">blog purpose</a></div>						
+			<div class="date"> 2018-11-13 </div>
+			<div class="article-title"><a href="/2018/11/13/使用hexo搭建博客/">使用hexo搭建博客</a></div>						
 		</h3>
 	
 
@@ -123,11 +123,46 @@
   <div class="row">
 	
 	
-		<h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>从2014年开始就折腾自己的个人博客，断断续续，从现在开始使用github来写自己的个人博客，用来记录自己的学习过程，把博客和折腾分开。专心学习。</p>
+		<p>使用github page来托管我们的博客内容。文章的书写格式为markdown。使用hexo完成markdown到html的转换, 使用hexo deploy发布到github page上。</p>
+<h2 id="相关名词"><a href="#相关名词" class="headerlink" title="相关名词"></a>相关名词</h2><ul>
+<li>markdown</li>
+</ul>
+<p>John Gruber在2004年发明了markdown, markdown易写易读,使用工具可以方便的转换为html等格式。</p>
+<ul>
+<li>github page</li>
+</ul>
+<p>github page提供静态页面服务, 程序员不仅可以分享代码, 还可以写技术文章。</p>
+<ul>
+<li>hexo</li>
+</ul>
+<p>nodejs开发的工具，用来把markdown转换为html静态网站</p>
+<h2 id="hexo安装步骤"><a href="#hexo安装步骤" class="headerlink" title="hexo安装步骤"></a>hexo安装步骤</h2><ul>
+<li>安装nodejs <code>brew install nodejs</code></li>
+<li>安装hexo <code>npm i -g hexo</code></li>
+<li>初始化根目录 <code>mkdir blog &amp;&amp; cd blog &amp;&amp; hexo init</code></li>
+<li>安装git部署插件 <code>npm install hexo-deployer-git --save</code></li>
+<li>切换主题(可选)<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/wzpan/hexo-theme-freemind.git themes/freemind &amp;&amp; \</span><br><span class="line">npm install hexo-tag-bootstrap --save &amp;&amp; \</span><br><span class="line">npm install hexo-generator-search --save &amp;&amp; \</span><br><span class="line">npm install hexo-recommended-posts --save</span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<p>修改_config.yml, 切换主题 <code>sed -i &#39;s/^theme:.*/theme: freemind/g&#39; _config.yml</code></p>
+<h2 id="hexo-使用步骤"><a href="#hexo-使用步骤" class="headerlink" title="hexo 使用步骤"></a>hexo 使用步骤</h2><p>创建文章（正式文章或者草稿，使用markdown工具进行书写，书写完成后转换为html格式后进行发布。在书写工程中也可以在执行<code>hexo gen &amp;&amp; hexo server</code>后访问localhost:4000预览效果。</p>
+<h2 id="命令参考"><a href="#命令参考" class="headerlink" title="命令参考"></a>命令参考</h2><ul>
+<li>创建草稿 <code>hexo new draft 标题</code></li>
+<li>发布草稿成为正式文章 <code>hexo publish 标题</code></li>
+<li>创建正式文章 <code>hexo new 标题</code></li>
+<li>使用文本工具进行写作, 如使用<code>vim编辑 vim 标题</code></li>
+<li>转换markdown到静态文件 <code>hexo gen</code></li>
+<li>预览网站效果 <code>hexo server</code></li>
+<li>发布到github page <code>hexo deploy</code></li>
+<li>清空生成文件 <code>hexo clean</code></li>
+</ul>
+<h2 id="hexo部署方案"><a href="#hexo部署方案" class="headerlink" title="hexo部署方案"></a>hexo部署方案</h2><p>我希望markdown源文件和hexo生成的静态文件完全隔离。可以方便随时切换主题甚至工具，我只关心源markdown文件。所以设置两个仓库，一个保存hexo生成的html, 一个包含源markdown文件及配置文件。使用ln建立链接。算是linux下的kiss原则吧。我使用 <a href="https://github.com/zhoupro/blog" target="_blank" rel="noopener">blog</a>和<a href="https://github.com/zhoupro/zhoupro.github.io" target="_blank" rel="noopener">zhoupro.github.io</a> 来搭建博客。</p>
+<h2 id="简化流程"><a href="#简化流程" class="headerlink" title="简化流程"></a>简化流程</h2><p><a href="https://github.com/zhoupro/blog" target="_blank" rel="noopener">blog</a>中的init.sh脚本把以上步骤自动化, 执行 <code>. ./init.sh</code>后直接写作即可。</p>
+<h2 id="图片处理"><a href="#图片处理" class="headerlink" title="图片处理"></a>图片处理</h2><p>参考上传图片到github，创建自己的github仓库，然后配置下脚本 <code>curl https://gist.githubusercontent.com/zhoupro/e09657196114420d63218ebe77079d05/raw/c6d3bd4d8d3dc342813ae37de4e3aed652f9ac30/sh -o genUrl.sh &amp;&amp; bash genUrl.sh yourpic</code>。你也可以上传到第三方服务，使用它们生成的链接。</p>
 
 	
 	</div>
-  <a type="button" href="/2018/11/06/blog/#more" class="btn btn-default more">Read More</a>
+  <a type="button" href="/2018/11/13/使用hexo搭建博客/#more" class="btn btn-default more">Read More</a>
 </div>
 
 	       
@@ -165,9 +200,9 @@
 		<h4>Categories</h4>
 		<ul class="tag_box inline list-unstyled">
 		
-			<li><a href="/categories/code/">code<span>1</span></a></li>
+			<li><a href="/categories/工具/">工具<span>2</span></a></li>
 		
-			<li><a href="/categories/target/">target<span>1</span></a></li>
+			<li><a href="/categories/目标/">目标<span>1</span></a></li>
 		
 		</ul>
 	</div>
@@ -178,9 +213,11 @@
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
+			<li><a href="/tags/blog/">blog<span>1</span></a></li>
+		
 			<li><a href="/tags/valgrind/">valgrind<span>1</span></a></li>
 		
-			<li><a href="/tags/target/">target<span>1</span></a></li>
+			<li><a href="/tags/hexo/">hexo<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -192,6 +229,10 @@
 <div class="widget">
   <h4>Recent Posts</h4>
   <ul class="entry list-unstyled">
+    
+      <li>
+        <a href="/2018/11/13/使用hexo搭建博客/"><i class="fa fa-file-o"></i>使用hexo搭建博客</a>
+      </li>
     
       <li>
         <a href="/2018/11/12/valgrind生成调用链/"><i class="fa fa-file-o"></i>valgrind生成调用链</a>
