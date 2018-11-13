@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<search>
+  <entry>
+    <title><![CDATA[valgrind生成调用链]]></title>
+    <url>%2F2018%2F11%2F12%2Fvalgrind%E7%94%9F%E6%88%90%E8%B0%83%E7%94%A8%E9%93%BE%2F</url>
+    <content type="text"><![CDATA[valgrind查看调用关系在学习开源代码时，我们希望有个工具能够给我们全局的视角而不过早的陷入细节的泥淖中。读书可以跳读，读代码也是可以跳读的。valgrind可以生成整个调用关系链。该关系链指导我们，迅速定位到我们关心的细节。 安装ubuntu系统12apt-get install valgrind apt-get install kcachegrind mac系统1brew install qcachegrind --with-graphviz 使用 使用valgrind生成调用关系 1valgrind --tool=callgrind --trace-children=yes --callgrind-out-file=/data/opt/callgrind.out.1111 ./nginx 使用qcachegrind查看调用关系 问题 Error: can not open cache simulation output file保证写的目录有写的权限，可以创建一个目录，赋值为777，在该目录下启动命令valgrind --tool=callgrind --trace-children=yes /data/server/nginx/sbin/nginx, 使用kill终止程序kill SIGINT pid]]></content>
+      <categories>
+        <category>tool</category>
+        <category>profile</category>
+      </categories>
+      <tags>
+        <tag>valgrind</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title><![CDATA[blog purpose]]></title>
+    <url>%2F2018%2F11%2F06%2Fblog%2F</url>
+    <content type="text"><![CDATA[目的从2014年开始就折腾自己的个人博客，断断续续，从现在开始使用github来写自己的个人博客，用来记录自己的学习过程，把博客和折腾分开。专心学习。]]></content>
+      <categories>
+        <category>target</category>
+        <category>write</category>
+      </categories>
+      <tags>
+        <tag>target</tag>
+      </tags>
+  </entry>
+</search>
