@@ -101,11 +101,14 @@
 <li>使用qcachegrind查看调用关系</li>
 </ul>
 <p><img src="https://raw.githubusercontent.com/zhoupro/images/master/20181112/qcachegrind.png" alt="qcachegrind" title="qcachegrind"></p>
+<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ul>
+<li>Error: can not open cache simulation output file<br>保证写的目录有写的权限，可以创建一个目录，赋值为777，在该目录下启动命令<code>valgrind --tool=callgrind --trace-children=yes /data/server/nginx/sbin/nginx</code>, 使用kill终止程序<code>kill SIGINT pid</code></li>
+</ul>
 
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/12/valgrind生成调用链/" data-id="cjoe4zh8l0003bss64hfmo3sv" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2018/11/12/valgrind生成调用链/" data-id="cjof47wu30000vzfycy8dzc47" class="article-share-link">分享</a>
       
       
       
@@ -152,7 +155,7 @@
       
     </div>
     <footer class="article-footer">
-      <a data-url="http://yoursite.com/2018/11/06/blog/" data-id="cjoe4zh8k0002bss6zsbumpa4" class="article-share-link">分享</a>
+      <a data-url="http://yoursite.com/2018/11/06/blog/" data-id="cjof47wu80001vzfybkpi0pim" class="article-share-link">分享</a>
       
       
       
