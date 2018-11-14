@@ -1,0 +1,364 @@
+<!DOCTYPE HTML>
+<html>
+<head><meta name="generator" content="Hexo 3.8.0">
+  <meta charset="utf-8">
+  
+  <title>nginx构建系统 | prozhou blog</title>
+  <meta name="author" content="prozhou">
+  
+  <meta name="description" content="nginx构建
+使用shell语言生成makefile，以及ngx_auto_config.h,ngx_auto_headers.h,ngx_modules.c。其中ngx_auto_config.h为各种常量定义，ngx_auto_headers.h为头文件，ngx_modules.c为nginx">
+  
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <meta property="og:title" content="nginx构建系统">
+  <meta property="og:site_name" content="prozhou blog">
+
+  
+    <meta property="og:image" content="">
+  
+
+  
+  
+    <link href="/favicon.png" rel="icon">
+  
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="/css/themes/cerulean.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/font-awesome.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/style.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/responsive.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/highlight-default.min.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/google-fonts.css" media="screen" type="text/css">
+  <link rel="stylesheet" href="/css/comment.css" media="screen" type="text/css">
+  <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.9/es5-shim.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/es5-shim/4.5.7/es5-sham.min.js"></script>
+  <![endif]-->
+
+  <script src="/js/jquery-2.0.3.min.js"></script>
+  
+    <script src="/js/marked.js"></script>
+    <script src="/js/comment.js"></script>
+    <script src="/js/timeago.min.js"></script>
+    <script src="/js/highlight.min.js"></script>
+	<script src="/js/spin.min.js"></script>
+  
+  <!-- analytics -->
+  
+
+
+
+</head>
+</html>
+ <body>  
+  <nav id="main-nav" class="navbar navbar-inverse navbar-default navbar-fixed-top" role="navigation">
+    <div class="container">
+      <button type="button" class="navbar-header navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+	<span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+       <a class="navbar-brand" href="/">prozhou blog</a>
+      <div class="collapse navbar-collapse nav-menu">
+		<ul class="nav navbar-nav">
+		  
+		  <li>
+			<a href="/archives" title="All the articles.">
+			  <i class="fa fa-archive"></i>Archives
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/categories" title="All the categories.">
+			  <i class="fa fa-folder"></i>Categories
+			</a>
+		  </li>
+		  
+		  <li>
+			<a href="/tags" title="All the tags.">
+			  <i class="fa fa-tags"></i>Tags
+			</a>
+		  </li>
+		  
+		</ul>
+      </div>
+    </div> <!-- container -->
+</nav>
+<div class="clearfix"></div>
+
+  <div class="container">
+  	<div class="content">
+    	 
+
+
+	
+		<div class="page-header page-header-inverse ">		
+			<h1 class="title title-inverse "> nginx构建系统</h1>
+		</div>		
+	
+
+
+
+
+
+
+<div class="row post">
+	<!-- cols -->
+	
+	<div id="top_meta"></div>
+	<div class="col-md-9">
+	
+
+	<!-- content -->
+	<div class="mypage">		
+	  		
+
+	  <h2 id="nginx构建"><a href="#nginx构建" class="headerlink" title="nginx构建"></a>nginx构建</h2><blockquote>
+<p>使用shell语言生成makefile，以及ngx_auto_config.h,ngx_auto_headers.h,ngx_modules.c。其中ngx_auto_config.h为各种常量定义，ngx_auto_headers.h为头文件，ngx_modules.c为nginx模块。makefile用来组织编译流程。</p>
+</blockquote>
+<h3 id="configure主流程"><a href="#configure主流程" class="headerlink" title="configure主流程"></a>configure主流程</h3><ul>
+<li><p>auto/options<br>根据configure的参数，初始化和configure参数相关的变量值</p>
+</li>
+<li><p>auto/init<br>定义自动生成的文件名称</p>
+</li>
+<li><p>auto/source<br>定义模块名称, 头文件查找目录, 头文件，源文件</p>
+</li>
+<li><p>auto/cc/conf<br>选择编译器。假设选择gcc。会构造gcc的编译选项, 赋值CFLAGS, 针对gcc版本、操作系统、cpu等添加参数。</p>
+</li>
+<li><p>auto/headers<br>向ngx_auto_headers.h写入通用的头文件</p>
+</li>
+<li><p>auto/os/conf<br>检查操作系统特性。以linux,x86为例。<br>检查epoll,sendfile, sched_setaffinity, crypt_r, crypt_r等功能</p>
+</li>
+<li><p>auto/unix<br>检查poll,kqueue, crypt, fcntl, posix_fadvise, directio, statfs, dlopen, sched_yield, setsockopt, getsockopt,accept4等特性。定义指针，size_t,time_t长度,一些typedef，机器大小端。</p>
+</li>
+<li><p>auto/modules</p>
+</li>
+</ul>
+<blockquote>
+<p>根据用户编译参数,定义一些常量;<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> NGX_HAVE_PWRITE</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NGX_HAVE_PWRITE  1</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br><span class="line"></span><br><span class="line"><span class="meta">#<span class="meta-keyword">ifndef</span> NGX_SYS_NERR</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> NGX_SYS_NERR  135</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">endif</span></span></span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<blockquote>
+<p>生成ngx_modules.c<br><figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">extern</span> <span class="keyword">ngx_module_t</span>  ngx_http_range_body_filter_module;</span><br><span class="line"><span class="keyword">extern</span> <span class="keyword">ngx_module_t</span>  ngx_http_not_modified_filter_module;</span><br><span class="line"></span><br><span class="line"><span class="keyword">ngx_module_t</span> *ngx_modules[] = &#123;</span><br><span class="line">    &amp;ngx_core_module,</span><br><span class="line">    &amp;ngx_errlog_module,</span><br><span class="line">    &amp;ngx_conf_module,</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<ul>
+<li>auto/lib/conf<br>pcre, openssl, md5,libgd,zlib等库</li>
+<li>auto/make<br>创建makefile脚本</li>
+<li>auto/lib/make<br>依赖库makefile</li>
+<li>auto/install<br>makefile的install部分</li>
+<li>auto/summary<br>汇总一些检查信息</li>
+</ul>
+<h3 id="makefile-分析"><a href="#makefile-分析" class="headerlink" title="makefile 分析"></a>makefile 分析</h3><p>nginx精简版makefile<br><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br></pre></td><td class="code"><pre><span class="line">CC =	cc</span><br><span class="line">CFLAGS =  -pipe  -O -W -Wall -Wpointer-arith -Wno-unused -Werror -g -ggdb3 -O0 -Wno-error</span><br><span class="line">CPP =	cc -E</span><br><span class="line">LINK =	<span class="variable">$(CC)</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">ALL_INCS = -I src/core \</span><br><span class="line">	-I src/event \</span><br><span class="line">    ...</span><br><span class="line">	-I src/mail</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">CORE_DEPS = src/core/nginx.h \</span><br><span class="line">	src/core/ngx_config.h \</span><br><span class="line">    ...</span><br><span class="line">	src/core/ngx_palloc.h </span><br><span class="line">CORE_INCS = -I src/core \</span><br><span class="line">	-I src/event \</span><br><span class="line">    ...</span><br><span class="line">	-I objs</span><br><span class="line"></span><br><span class="line">HTTP_DEPS = src/http/ngx_http.h \</span><br><span class="line">	src/http/ngx_http_request.h \</span><br><span class="line">    ...</span><br><span class="line">	src/http/modules/ngx_http_ssi_filter_module.h</span><br><span class="line"></span><br><span class="line">HTTP_INCS = -I src/http \</span><br><span class="line">	-I src/http/modules</span><br><span class="line"></span><br><span class="line"><span class="section">objs/nginx:	objs/src/core/nginx.o \</span></span><br><span class="line">	objs/src/core/ngx_log.o \</span><br><span class="line">    ...</span><br><span class="line">	objs/src/core/ngx_palloc.o </span><br><span class="line">	<span class="variable">$(LINK)</span> -o objs/nginx \</span><br><span class="line">    ...</span><br><span class="line">	objs/src/core/ngx_log.o  \</span><br><span class="line">    -lpthread -lcrypt -lpcre -lcrypto -lcrypto -lz</span><br><span class="line"></span><br><span class="line"><span class="section">objs/ngx_modules.o:	<span class="variable">$(CORE_DEPS)</span> \</span></span><br><span class="line">	objs/ngx_modules.c</span><br><span class="line">	<span class="variable">$(CC)</span> -c <span class="variable">$(CFLAGS)</span> <span class="variable">$(CORE_INCS)</span> \</span><br><span class="line">		-o objs/ngx_modules.o \</span><br><span class="line">		objs/ngx_modules.c</span><br><span class="line"></span><br><span class="line"><span class="section">objs/src/http/modules/ngx_http_upstream_keepalive_module.o:	<span class="variable">$(CORE_DEPS)</span> <span class="variable">$(HTTP_DEPS)</span> \</span></span><br><span class="line">	src/http/modules/ngx_http_upstream_keepalive_module.c</span><br><span class="line">	<span class="variable">$(CC)</span> -c <span class="variable">$(CFLAGS)</span> <span class="variable">$(CORE_INCS)</span> <span class="variable">$(HTTP_INCS)</span> \</span><br><span class="line">		-o objs/src/http/modules/ngx_http_upstream_keepalive_module.o \</span><br><span class="line">		src/http/modules/ngx_http_upstream_keepalive_module.c</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="section">objs/src/http/modules/ngx_http_stub_status_module.o:	<span class="variable">$(CORE_DEPS)</span> <span class="variable">$(HTTP_DEPS)</span> \</span></span><br><span class="line">	src/http/modules/ngx_http_stub_status_module.c</span><br><span class="line">	<span class="variable">$(CC)</span> -c <span class="variable">$(CFLAGS)</span> <span class="variable">$(CORE_INCS)</span> <span class="variable">$(HTTP_INCS)</span> \</span><br><span class="line">		-o objs/src/http/modules/ngx_http_stub_status_module.o \</span><br><span class="line">		src/http/modules/ngx_http_stub_status_module.c</span><br></pre></td></tr></table></figure></p>
+<h3 id="生成makefile的循环脚本"><a href="#生成makefile的循环脚本" class="headerlink" title="生成makefile的循环脚本"></a>生成makefile的循环脚本</h3><p>在makefile中有很多<code>objs/src/*.o</code>为target的规则,是通过脚本批量生成。<br>以下脚本为核心原文件生成makefile的规则。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="comment"># the core sources</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> ngx_src <span class="keyword">in</span> <span class="variable">$CORE_SRCS</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">    ngx_src=`<span class="built_in">echo</span> <span class="variable">$ngx_src</span> | sed -e <span class="string">"s/\//<span class="variable">$ngx_regex_dirsep</span>/g"</span>`</span><br><span class="line">    ngx_obj=`<span class="built_in">echo</span> <span class="variable">$ngx_src</span> \</span><br><span class="line">        | sed -e <span class="string">"s#^\(.*\.\)cpp\\<span class="variable">$#</span><span class="variable">$ngx_objs_dir</span>\1<span class="variable">$ngx_objext</span>#g"</span> \</span><br><span class="line">              -e <span class="string">"s#^\(.*\.\)cc\\<span class="variable">$#</span><span class="variable">$ngx_objs_dir</span>\1<span class="variable">$ngx_objext</span>#g"</span> \</span><br><span class="line">              -e <span class="string">"s#^\(.*\.\)c\\<span class="variable">$#</span><span class="variable">$ngx_objs_dir</span>\1<span class="variable">$ngx_objext</span>#g"</span> \</span><br><span class="line">              -e <span class="string">"s#^\(.*\.\)S\\<span class="variable">$#</span><span class="variable">$ngx_objs_dir</span>\1<span class="variable">$ngx_objext</span>#g"</span>`</span><br><span class="line"></span><br><span class="line">    cat &lt;&lt; END                                                &gt;&gt; <span class="variable">$NGX_MAKEFILE</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$ngx_obj</span>:	\$(CORE_DEPS)<span class="variable">$ngx_cont</span><span class="variable">$ngx_src</span></span><br><span class="line">	<span class="variable">$ngx_cc</span><span class="variable">$ngx_tab</span><span class="variable">$ngx_objout</span><span class="variable">$ngx_obj</span><span class="variable">$ngx_tab</span><span class="variable">$ngx_src</span><span class="variable">$NGX_AUX</span></span><br><span class="line"></span><br><span class="line">END</span><br><span class="line"></span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p>在auto/make中一共会有四个大循环,来自动化生成大量的规则。</p>
+<ul>
+<li>核心源文件</li>
+<li>http源文件</li>
+<li>mail源文件</li>
+<li>misc源文件</li>
+</ul>
+<h3 id="采用shell编写的原因"><a href="#采用shell编写的原因" class="headerlink" title="采用shell编写的原因"></a>采用shell编写的原因</h3><p>nginx是模块化开发，有大量的模块可供用户选择。nginx为不同的系统做了大量的编译优化，充分挖掘性能。nginx代码量大，手动编写makefile枯燥易出错。基于以上原因，nginx的configure采用shell脚本开发，只编译选择模块，为不同系统提供不同编译参数，手动生成makefile规则。</p>
+	  
+	</div>
+
+	<!-- recommended posts -->
+	
+
+	<div>
+  	<center>
+	<div class="pagination">
+<ul class="pagination">
+	 
+		
+          <li class="prev disabled"><a><i class="fa fa-arrow-circle-o-left"></i>Prev</a></li>
+        
+
+        <li><a href="/archives"><i class="fa fa-archive"></i>Archive</a></li>
+
+		
+		   <li class="next"><a href="/2018/11/14/make快速入门/" class="alignright next">Next<i class="fa fa-arrow-circle-o-right"></i></a></li>         
+        
+	
+</ul>
+</div>
+
+    </center>
+	</div>
+
+    <!-- share -->
+    
+        
+    <div class="bdsharebuttonbox">
+        <a href="#" class="bds_more" data-cmd="more"></a>
+        <a href="#" class="bds_weixin" data-cmd="weixin" title="分享到微信"></a>
+        <a href="#" class="bds_tsina" data-cmd="tsina" title="分享到新浪微博"></a>
+        <a href="#" class="bds_fbook" data-cmd="fbook" title="分享到Facebook"></a>
+        <a href="#" class="bds_twi" data-cmd="twi" title="分享到Twitter"></a>
+        <a href="#" class="bds_linkedin" data-cmd="linkedin" title="分享到linkedin"></a>
+        <a href="#" class="bds_evernotecn" data-cmd="evernotecn" title="分享到印象笔记"></a>
+        <a href="#" class="bds_youdao" data-cmd="youdao" title="分享到有道云笔记"></a>
+        <a href="#" class="bds_copy" data-cmd="copy" title="分享到复制网址"></a>
+    </div>
+    <script>
+        window._bd_share_config={"common":{"bdSnsKey":{},"bdText":"","bdMini":"2","bdMiniList":false,"bdPic":"","bdStyle":"1","bdSize":"24"},"share":{}};
+        with(document)0[(getElementsByTagName('head')[0]||body).appendChild(createElement('script')).src='http://bdimg.share.baidu.com/static/api/js/share.js?v=89860593.js?cdnversion='+~(-new Date()/36e5)];
+    </script>
+
+
+        
+
+    
+	
+	<!-- comment -->
+	
+<section id="comment">
+  <h2 class="title">Comments</h2>
+    	 
+	 <div id="comment-thread"></div>
+	 <div id="loading-spin"></div>
+	 <script type="text/javascript">
+	   getComments({
+           type: "github" ? "github" : "github",       
+	       user: "zhoupro",
+	       repo: "zhoupro.github.io",
+		   client_id: "bf7d4ba11877db88543e",
+           client_secret: "bff8a6b06b745c0bfcdccbe225623ea8e2a057bb",
+		   no_comment: "No comments yet. Press the button and go to comment now!",
+		   go_to_comment: "Go to comment",
+		   no_issue: "no_issue",
+		   issue_title: "nginx构建系统",
+		   issue_id: "",
+		   btn_class: "btn btn-primary",
+		   comments_target: "#comment-thread",
+		   loading_target: "#loading_spin"
+		   });
+	 </script>
+  
+</section>
+
+
+	</div> <!-- col-md-9/col-md-12 -->
+		
+	
+	<div id="side_meta">
+		<div class="col-md-3" id="post_meta"> 
+
+	<!-- date -->
+	
+	<div class="meta-widget">
+	<i class="fa fa-clock-o"></i>
+	2018-11-14 
+	</div>
+	
+
+	<!-- categories -->
+    
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#categorys"><i class="fa fa-folder"></i></a>	
+    <ul id="categorys" class="tag_box list-unstyled collapse in">
+          
+  <li>
+    </li><li><a href="/categories/make/">make<span>1</span></a></li>
+  
+
+    </ul>
+	</div>
+	
+
+	<!-- tags -->
+	
+	<div class="meta-widget">
+	<a data-toggle="collapse" data-target="#tags"><i class="fa fa-tags"></i></a>		  
+    <ul id="tags" class="tag_box list-unstyled collapse in">	  
+	    
+  <li><a href="/tags/nginx/">nginx<span>1</span></a></li> <li><a href="/tags/makefile/">makefile<span>1</span></a></li> <li><a href="/tags/构建/">构建<span>1</span></a></li>
+    </ul>
+	</div>
+	
+
+	<!-- toc -->
+	<div class="meta-widget">
+	
+	</div>
+	
+    <hr>
+	
+</div><!-- col-md-3 -->
+
+	</div>
+		
+
+</div><!-- row -->
+
+
+
+	</div>
+  </div>
+  <div class="container-narrow">
+  <footer> <p>
+  &copy; 2018 prozhou
+  
+      with help from <a href="http://hexo.io/" target="_blank">Hexo</a> and <a href="http://getbootstrap.com/" target="_blank">Twitter Bootstrap</a>. Theme by <a href="http://github.com/wzpan/hexo-theme-freemind/">Freemind</a>.    
+</p> </footer>
+</div> <!-- container-narrow -->
+  
+
+
+  
+<a id="gotop" href="#">   
+  <span>▲</span> 
+</a>
+
+<script src="/js/jquery.imagesloaded.min.js"></script>
+<script src="/js/gallery.js"></script>
+<script src="/js/bootstrap.min.js"></script>
+<script src="/js/main.js"></script>
+<script src="/js/search.js"></script> 
+
+
+<link rel="stylesheet" href="/fancybox/jquery.fancybox.css" media="screen" type="text/css">
+<script src="/fancybox/jquery.fancybox.pack.js"></script>
+<script type="text/javascript">
+(function($){
+  $('.fancybox').fancybox();
+})(jQuery);
+</script>
+
+
+
+   <script type="text/javascript">      
+     var search_path = "search.xml";
+	 if (search_path.length == 0) {
+	 	search_path = "search.xml";
+	 }
+	 var path = "/" + search_path;
+     searchFunc(path, 'local-search-input', 'local-search-result');
+   </script>
+
+
+<!-- syntax highlighting -->
+
+  <script>
+  marked.setOptions({
+    highlight: function (code, lang) {
+        return hljs.highlightAuto(code).value;
+    }
+  });
+  function Highlighting(){
+    var markdowns = document.getElementsByClassName('markdown');
+    for(var i=0;i<markdowns.length;i++){
+        if(markdowns[i].innerHTML) markdowns[i].innerHTML =marked(markdowns[i].innerHTML);
+    }
+  }
+  window.addEventListener('DOMContentLoaded', Highlighting, false);
+  window.addEventListener('load', Highlighting, false);
+  </script>
+
+
+</body>
+   </html>

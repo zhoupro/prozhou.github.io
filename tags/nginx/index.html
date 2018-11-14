@@ -3,7 +3,7 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>prozhou blog</title>
+  <title>nginx | prozhou blog</title>
   <meta name="author" content="prozhou">
   
   
@@ -90,44 +90,26 @@
 
   <div class="container">
   	<div class="content">
-    	 <div class="page-header page-header-inverse ">
-  <h1 class="title title-inverse ">prozhou blog</h1>
+    	 
+
+<!-- title -->
+<div class="page-header page-header-inverse ">
+  <h1 class="archive-title-tag title title-inverse ">nginx</h1>
 </div>
 
 <div class="row page">
-
+  <!-- cols -->
+  
+  <div class="col-md-9">
 	
-	<div class="col-md-9">
-	
 
-		<div class="slogan">
-      <i class="fa fa-heart"></i>
-      Yet another bootstrap theme.
-</div>    
-		<div id="top_search"></div>
-		<div class="mypage">
-		
-		<!-- title and entry -->
-        <!-- render top articles firstly -->
-        
-		
-            
-		
-            
-		
-            
-		
-            
-		
-            
-		
-            
-		
-        
-        <!-- render other articles -->
-        
-           
-			  
+	  <div id="top_search"></div>
+
+      
+         <!-- display as entry -->
+	     <div class="mypage">
+	       
+		     
 	
 	<!-- display as entry -->	
 		<h3 class="title">
@@ -137,7 +119,7 @@
 	
 
 
-			  <div class="entry">
+		     <div class="entry">
   <div class="row">
 	
 	
@@ -192,250 +174,24 @@
   <a type="button" href="/2018/11/14/nginx构建系统/#more" class="btn btn-default more">Read More</a>
 </div>
 
-           
-		
-           
-			  
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2018-11-14 </div>
-			<div class="article-title"><a href="/2018/11/14/make快速入门/">make快速入门</a></div>						
-		</h3>
-	
-
-
-			  <div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="make做什么"><a href="#make做什么" class="headerlink" title="make做什么"></a>make做什么</h2><p>大型项目为了方便维护和书写，拆分为大量的源文件和头文件。makefile告诉make如何编译、链接。当重新编译时只需重新编译改变的文件即可，当一个头文件修改后，依赖该头文件的源文件需要重新编译</p>
-<h2 id="make帮助手册的一个实例"><a href="#make帮助手册的一个实例" class="headerlink" title="make帮助手册的一个实例"></a>make帮助手册的一个实例</h2><figure class="highlight makefile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">edit : main.o kbd.o command.o display.o \</span><br><span class="line">            insert.o search.o files.o utils.o</span><br><span class="line">             cc -o edit main.o kbd.o command.o display.o \</span><br><span class="line">                        insert.o search.o files.o utils.o</span><br><span class="line">     main.o : main.c defs.h</span><br><span class="line">             cc -c main.c</span><br><span class="line">     kbd.o : kbd.c defs.h command.h</span><br><span class="line">             cc -c kbd.c</span><br><span class="line">     command.o : command.c defs.h command.h</span><br><span class="line">             cc -c command.c</span><br><span class="line">     display.o : display.c defs.h buffer.h</span><br><span class="line">             cc -c display.c</span><br><span class="line">     insert.o : insert.c defs.h buffer.h</span><br><span class="line">             cc -c insert.c</span><br><span class="line">     search.o : search.c defs.h buffer.h</span><br><span class="line">             cc -c search.c</span><br><span class="line">     files.o : files.c defs.h buffer.h command.h</span><br><span class="line">             cc -c files.c</span><br><span class="line">     utils.o : utils.c defs.h</span><br><span class="line">             cc -c utils.c</span><br><span class="line">     clean :</span><br><span class="line">             rm edit main.o kbd.o command.o display.o \</span><br><span class="line">                insert.o search.o files.o utils.o</span><br></pre></td></tr></table></figure>
-<h2 id="对应的森林"><a href="#对应的森林" class="headerlink" title="对应的森林"></a>对应的森林</h2><p>makefile可以理解成数据结构中的森林。</p>
-<p><img src="https://raw.githubusercontent.com/zhoupro/images/master/20181114/make执行流程.jpg" alt="make tree" title="makefile对应的树"><br>makefile由一系列规则组成，规则的格式如下：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">target ... : prerequisites ... </span><br><span class="line">    recipe</span><br></pre></td></tr></table></figure></p>
-<p>prerequisites是本规则的依赖。recipe一些列命令，用于产生target。   简化为函数形式为<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">func(pre1, pre2, ...)</span><br><span class="line">    recipe1</span><br><span class="line">    recipe2</span><br><span class="line">    ...</span><br><span class="line">    recipen</span><br><span class="line">    return target</span><br></pre></td></tr></table></figure></p>
-<p>也可以没有依赖和返回<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">func()</span><br><span class="line">    recipe1</span><br><span class="line">    recipe2</span><br><span class="line">    ...</span><br><span class="line">    recipen</span><br></pre></td></tr></table></figure></p>
-<h3 id="执行make的流程"><a href="#执行make的流程" class="headerlink" title="执行make的流程"></a>执行make的流程</h3><blockquote>
-<p>类似二叉树的后续遍历</p>
-<ul>
-<li>先访问edit, 发现有依赖，继续访问main.o,有依赖，继续访问main.c，没有依赖。再访问defs.h没有依赖。访问main.o。比较<br>main.o和main.c、defs.h的修改时间。如果main.c或者defs.h的修改时间大于main.o。则执行main.o中的脚本 cc -c main.c。否则继续使用main.o</li>
-<li>继续访问utils.o。发现有依赖，继续访问utils.c，无依赖。访问defs.h无依赖。如果utils.c和defs.h的修改时间有大于utils.o则执行utils.o的脚本cc -c utils.c。否则继续使用utils.o</li>
-<li>访问edit节点，如果main.o … utils.o的修改时间大于edit的时间。则执行cc -o edit main.o … utils.o。否则继续使用edit。</li>
-</ul>
-</blockquote>
-<h3 id="执行make-clean的流程"><a href="#执行make-clean的流程" class="headerlink" title="执行make clean的流程"></a>执行make clean的流程</h3><p>make无依赖，直接执行recipe就可。</p>
-
-	
-	</div>
-  <a type="button" href="/2018/11/14/make快速入门/#more" class="btn btn-default more">Read More</a>
-</div>
-
-           
-		
-           
-			  
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2018-11-14 </div>
-			<div class="article-title"><a href="/2018/11/14/gcc常见参数整理/">gcc常见参数整理</a></div>						
-		</h3>
-	
-
-
-			  <div class="entry">
-  <div class="row">
-	
-	
-		<h3 id="make约定俗成的规范："><a href="#make约定俗成的规范：" class="headerlink" title="make约定俗成的规范："></a>make约定俗成的规范：</h3><ul>
-<li>1,首先从源代码生成目标文件(预处理,编译,汇编)，”-c”选项表示不执行链接步骤。<br><code>$(CC) $(CPPFLAGS) $(CFLAGS) example.c   -c   -o example.o</code></li>
-<li>2,然后将目标文件连接为最终的结果(连接)，”-o”选项用于指定输出文件的名字。<br><code>$(CC) $(LDFLAGS) example.o   -o example</code></li>
-<li>有一些软件包一次完成四个步骤：<br><code>$(CC) $(CPPFLAGS) $(CFLAGS) $(LDFLAGS) example.c   -o example</code></li>
-</ul>
-<h3 id="CFLAGS-与-CXXFLAGS"><a href="#CFLAGS-与-CXXFLAGS" class="headerlink" title="CFLAGS 与 CXXFLAGS"></a>CFLAGS 与 CXXFLAGS</h3><p>CFLAGS 表示用于 C 编译器的选项，CXXFLAGS 表示用于 C++ 编译器的选项。这两个变量实际上涵盖了编译和汇编两个步骤。大多数程序和库在编译时默认的优化级别是”2″(使用”-O2″选项)并且带有调试符号来编 译，也就是 CFLAGS=”-O2 -g”, CXXFLAGS=$CFLAGS 。事实上，”-O2″已经启用绝大多数安全的优化选项了。另一方面，由于大部分选项可以同时用于这两个变量，所以仅在最后讲述只能用于其中一个变量的选 项。[提醒]下面所列选项皆为非默认选项，你只要按需添加即可。</p>
-<h3 id="LDFLAGS"><a href="#LDFLAGS" class="headerlink" title="LDFLAGS"></a>LDFLAGS</h3><p>ld用于指定链接时参数</p>
-<h3 id="gcc参数解释"><a href="#gcc参数解释" class="headerlink" title="gcc参数解释"></a>gcc参数解释</h3><h4 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h4><ul>
-<li>c   编译</li>
-<li>Wall 最常用到的编译警告, 推荐总是使用该选项</li>
-<li>o  小写字母o指定结果文件名称</li>
-<li>l  链接库。编译器选项“-lNAME”试图链接标准库目录下的文件名为“libNAME.a”。lm =&gt; libm.a;  </li>
-<li>I  指定头文件搜索路径</li>
-<li>L  库搜索路径</li>
-<li>static 使用静态库</li>
-<li>ansi禁止那些与 ANSI/ISO 标准冲突的 GNU 扩展特性。在使用 GNU C 库(glibc) 的系统上，该选项也禁止了对 C 标准库的扩展。</li>
-<li>std  指定标准, c89,c99,gnu99,gnu89</li>
-<li>W常见潜在编程错误，建议开发时使用</li>
-</ul>
-<h4 id="预处理"><a href="#预处理" class="headerlink" title="预处理"></a>预处理</h4><ul>
-<li>D  -DNAME选项在命令行上定义预处理宏 NAME</li>
-<li>E 预处理源文件</li>
-</ul>
-<h4 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h4><ul>
-<li>g 存储额外的调试信息</li>
-</ul>
-<h4 id="优化"><a href="#优化" class="headerlink" title="优化"></a>优化</h4><ul>
-<li>O0 或者无-O选项: 无优化</li>
-<li>O1或者O: 不需要任何速度-空间折衷的最常见形式的优化</li>
-<li>O2、03:更近异步优化</li>
-</ul>
-<h4 id="平台相关"><a href="#平台相关" class="headerlink" title="平台相关"></a>平台相关</h4><ul>
-<li>march=CPU, 速度快，不可移植。–march=pentium4</li>
-</ul>
-<h3 id="动态链接"><a href="#动态链接" class="headerlink" title="动态链接"></a>动态链接</h3><p>一个与共享库链接的可执行文件仅仅包含它用到的函数相关的一个表格，而不是外部函数所在的 对象文件的整个机器码。在可执行文件开始运行以前，外部函数的机器码由操作系统从磁盘上的 该共享库中复制到内存中—-这个过程被称作动态链接</p>
-<h3 id="变量"><a href="#变量" class="headerlink" title="变量"></a>变量</h3><ul>
-<li>LD_LIBRARY_PATH 动态库查找路径</li>
-<li>C_INCLUDE_PATH 头文件查找路径</li>
-<li>LIBRARY_PATH  静态查找路径</li>
-</ul>
-
-	
-	</div>
-  <a type="button" href="/2018/11/14/gcc常见参数整理/#more" class="btn btn-default more">Read More</a>
-</div>
-
-           
-		
-           
-			  
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2018-11-13 </div>
-			<div class="article-title"><a href="/2018/11/13/使用hexo搭建博客/">使用hexo搭建博客</a></div>						
-		</h3>
-	
-
-
-			  <div class="entry">
-  <div class="row">
-	
-	
-		<p>使用github page来托管我们的博客内容。文章的书写格式为markdown。使用hexo完成markdown到html的转换, 使用hexo deploy发布到github page上。</p>
-<h2 id="相关名词"><a href="#相关名词" class="headerlink" title="相关名词"></a>相关名词</h2><ul>
-<li>markdown</li>
-</ul>
-<p>John Gruber在2004年发明了markdown, markdown易写易读,使用工具可以方便的转换为html等格式。</p>
-<ul>
-<li>github page</li>
-</ul>
-<p>github page提供静态页面服务, 程序员不仅可以分享代码, 还可以写技术文章。</p>
-<ul>
-<li>hexo</li>
-</ul>
-<p>nodejs开发的工具，用来把markdown转换为html静态网站</p>
-<h2 id="hexo安装步骤"><a href="#hexo安装步骤" class="headerlink" title="hexo安装步骤"></a>hexo安装步骤</h2><ul>
-<li>安装nodejs <code>brew install nodejs</code></li>
-<li>安装hexo <code>npm i -g hexo</code></li>
-<li>初始化根目录 <code>mkdir blog &amp;&amp; cd blog &amp;&amp; hexo init</code></li>
-<li>安装git部署插件 <code>npm install hexo-deployer-git --save</code></li>
-<li>切换主题(可选)<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">git <span class="built_in">clone</span> https://github.com/wzpan/hexo-theme-freemind.git themes/freemind &amp;&amp; \</span><br><span class="line">npm install hexo-tag-bootstrap --save &amp;&amp; \</span><br><span class="line">npm install hexo-generator-search --save &amp;&amp; \</span><br><span class="line">npm install hexo-recommended-posts --save</span><br></pre></td></tr></table></figure>
-</li>
-</ul>
-<p>修改_config.yml, 切换主题 <code>sed -i &#39;s/^theme:.*/theme: freemind/g&#39; _config.yml</code></p>
-<h2 id="hexo-使用步骤"><a href="#hexo-使用步骤" class="headerlink" title="hexo 使用步骤"></a>hexo 使用步骤</h2><p>创建文章（正式文章或者草稿，使用markdown工具进行书写，书写完成后转换为html格式后进行发布。在书写工程中也可以在执行<code>hexo gen &amp;&amp; hexo server</code>后访问localhost:4000预览效果。</p>
-<h2 id="命令参考"><a href="#命令参考" class="headerlink" title="命令参考"></a>命令参考</h2><ul>
-<li>创建草稿 <code>hexo new draft 标题</code></li>
-<li>发布草稿成为正式文章 <code>hexo publish 标题</code></li>
-<li>创建正式文章 <code>hexo new 标题</code></li>
-<li>使用文本工具进行写作, 如使用<code>vim编辑 vim 标题</code></li>
-<li>转换markdown到静态文件 <code>hexo gen</code></li>
-<li>预览网站效果 <code>hexo server</code></li>
-<li>发布到github page <code>hexo deploy</code></li>
-<li>清空生成文件 <code>hexo clean</code></li>
-</ul>
-<h2 id="hexo部署方案"><a href="#hexo部署方案" class="headerlink" title="hexo部署方案"></a>hexo部署方案</h2><p>我希望markdown源文件和hexo生成的静态文件完全隔离。可以方便随时切换主题甚至工具，我只关心源markdown文件。所以设置两个仓库，一个保存hexo生成的html, 一个包含源markdown文件及配置文件。使用ln建立链接。算是linux下的kiss原则吧。我使用 <a href="https://github.com/zhoupro/blog" target="_blank" rel="noopener">blog</a>和<a href="https://github.com/zhoupro/zhoupro.github.io" target="_blank" rel="noopener">zhoupro.github.io</a> 来搭建博客。</p>
-<h2 id="简化流程"><a href="#简化流程" class="headerlink" title="简化流程"></a>简化流程</h2><p><a href="https://github.com/zhoupro/blog" target="_blank" rel="noopener">blog</a>中的init.sh脚本把以上步骤自动化, 执行 <code>. ./init.sh</code>后直接写作即可。</p>
-<h2 id="图片处理"><a href="#图片处理" class="headerlink" title="图片处理"></a>图片处理</h2><p>参考上传图片到github，创建自己的github仓库，然后配置下脚本 <code>curl https://gist.githubusercontent.com/zhoupro/e09657196114420d63218ebe77079d05/raw/c6d3bd4d8d3dc342813ae37de4e3aed652f9ac30/sh -o genUrl.sh &amp;&amp; bash genUrl.sh yourpic</code>。你也可以上传到第三方服务，使用它们生成的链接。</p>
-
-	
-	</div>
-  <a type="button" href="/2018/11/13/使用hexo搭建博客/#more" class="btn btn-default more">Read More</a>
-</div>
-
-           
-		
-           
-			  
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2018-11-12 </div>
-			<div class="article-title"><a href="/2018/11/12/valgrind生成调用链/">valgrind生成调用链</a></div>						
-		</h3>
-	
-
-
-			  <div class="entry">
-  <div class="row">
-	
-	
-		<h2 id="valgrind查看调用关系"><a href="#valgrind查看调用关系" class="headerlink" title="valgrind查看调用关系"></a>valgrind查看调用关系</h2><p>在学习开源代码时，我们希望有个工具能够给我们全局的视角而不过早的陷入细节的泥淖中。读书可以跳读，读代码也是可以跳读的。valgrind可以生成整个调用关系链。该关系链指导我们，迅速定位到我们关心的细节。</p>
-<h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><p>ubuntu系统<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">apt-get install valgrind </span><br><span class="line">apt-get install kcachegrind</span><br></pre></td></tr></table></figure></p>
-<p>mac系统<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">brew install qcachegrind --with-graphviz</span><br></pre></td></tr></table></figure></p>
-<h2 id="使用"><a href="#使用" class="headerlink" title="使用"></a>使用</h2><ul>
-<li>使用valgrind生成调用关系</li>
-</ul>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">valgrind --tool=callgrind --trace-children=yes  --callgrind-out-file=/data/opt/callgrind.out.1111  ./nginx</span><br></pre></td></tr></table></figure>
-<ul>
-<li>使用qcachegrind查看调用关系</li>
-</ul>
-<p><img src="https://raw.githubusercontent.com/zhoupro/images/master/20181112/qcachegrind.png" alt="qcachegrind" title="qcachegrind"></p>
-<h2 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h2><ul>
-<li>Error: can not open cache simulation output file<br>保证写的目录有写的权限，可以创建一个目录，赋值为777，在该目录下启动命令<code>valgrind --tool=callgrind --trace-children=yes /data/server/nginx/sbin/nginx</code>, 使用kill终止程序<code>kill SIGINT pid</code></li>
-</ul>
-
-	
-	</div>
-  <a type="button" href="/2018/11/12/valgrind生成调用链/#more" class="btn btn-default more">Read More</a>
-</div>
-
-           
-		
-           
-			  
-	
-	<!-- display as entry -->	
-		<h3 class="title">
-			<div class="date"> 2018-11-06 </div>
-			<div class="article-title"><a href="/2018/11/06/blog/">blog purpose</a></div>						
-		</h3>
-	
-
-
-			  <div class="entry">
-  <div class="row">
-	
-	
-		<h3 id="目的"><a href="#目的" class="headerlink" title="目的"></a>目的</h3><p>从2014年开始就折腾自己的个人博客，断断续续，从现在开始使用github来写自己的个人博客，用来记录自己的学习过程，把博客和折腾分开。专心学习。</p>
-
-	
-	</div>
-  <a type="button" href="/2018/11/06/blog/#more" class="btn btn-default more">Read More</a>
-</div>
-
-           
-		
-
-		</div>
-
-		<!-- pagination -->
-		<div>
-  		<center>
-		<div class="pagination">
+	       
+	     </div>
+	     <div>
+	       <center>
+	         <div class="pagination">
 <ul class="pagination">
 	 
 </ul>
 </div>
 
-  		</center>
-		</div>
+	       </center>
+	     </div>	
+      
 
-		
-		
-	</div> <!-- col-md-9 -->
+</div> <!-- col-md-9/col-md-12 -->
 
-	
-		<div class="col-md-3">
+
+<div class="col-md-3">
 	<div id="sidebar">
 	
 			
@@ -468,21 +224,21 @@
 		<h4>Tag Cloud</h4>
 		<ul class="tag_box inline list-unstyled">		
 		
-			<li><a href="/tags/hexo/">hexo<span>1</span></a></li>
-		
-			<li><a href="/tags/构建/">构建<span>1</span></a></li>
-		
-			<li><a href="/tags/makefile/">makefile<span>1</span></a></li>
+			<li><a href="/tags/blog/">blog<span>1</span></a></li>
 		
 			<li><a href="/tags/valgrind/">valgrind<span>1</span></a></li>
 		
+			<li><a href="/tags/gcc/">gcc<span>1</span></a></li>
+		
 			<li><a href="/tags/nginx/">nginx<span>1</span></a></li>
+		
+			<li><a href="/tags/构建/">构建<span>1</span></a></li>
 		
 			<li><a href="/tags/make/">make<span>1</span></a></li>
 		
-			<li><a href="/tags/blog/">blog<span>1</span></a></li>
+			<li><a href="/tags/hexo/">hexo<span>1</span></a></li>
 		
-			<li><a href="/tags/gcc/">gcc<span>1</span></a></li>
+			<li><a href="/tags/makefile/">makefile<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -522,11 +278,9 @@
 	</div> <!-- sidebar -->
 </div> <!-- col-md-3 -->
 
-	
-	
-</div> <!-- row-fluid -->
 
 
+</div>
 	</div>
   </div>
   <div class="container-narrow">
