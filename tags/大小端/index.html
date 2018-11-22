@@ -3,13 +3,13 @@
 <head><meta name="generator" content="Hexo 3.8.0">
   <meta charset="utf-8">
   
-  <title>Categories | prozhou blog</title>
+  <title>大小端 | prozhou blog</title>
   <meta name="author" content="prozhou">
   
   
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
-  <meta property="og:title" content="Categories">
+  
   <meta property="og:site_name" content="prozhou blog">
 
   
@@ -90,138 +90,66 @@
 
   <div class="container">
   	<div class="content">
-    	 <!-- title -->
+    	 
+
+<!-- title -->
 <div class="page-header page-header-inverse ">
-	 <h1 class="title title-inverse "><i class="fa fa-folder"></i> Categories</h1>
+  <h1 class="archive-title-tag title title-inverse ">大小端</h1>
 </div>
 
-<div class="row page"> 
+<div class="row page">
+  <!-- cols -->
+  
+  <div class="col-md-9">
+	
+
+	  <div id="top_search"></div>
+
+      
+         <!-- display as entry -->
+	     <div class="mypage">
+	       
+		     
+	
+	<!-- display as entry -->	
+		<h3 class="title">
+			<div class="date"> 2018-11-22 </div>
+			<div class="article-title"><a href="/2018/11/22/大小端/">大小端</a></div>						
+		</h3>
+	
+
+
+		     <div class="entry">
+  <div class="row">
+	
+	
+		<p><img src="https://raw.githubusercontent.com/zhoupro/images/master/20181122/egg.png" alt="egg" title="大小端"></p>
+<h2 id="大小端解释"><a href="#大小端解释" class="headerlink" title="大小端解释"></a>大小端解释</h2><p>我们把数字0x12345678放置到鸡蛋中, 鸡蛋的大端位数高，鸡蛋的小端位数低。<br>存储顺序从低到高，如何读取这个数字呢，如果先打开鸡蛋的小端，读取的数字为0x78563412;如果先从鸡蛋的大端打开，读取的数字为0x12345678。所以大端中，数字的高位存储在内存中的低位。小端中数字的低位存储在内存中的低位。</p>
+<h2 id="nginx中大小端检测"><a href="#nginx中大小端检测" class="headerlink" title="nginx中大小端检测"></a>nginx中大小端检测</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">int main(void) &#123;</span><br><span class="line">    int i = 0x11223344;</span><br><span class="line">    char *p;</span><br><span class="line"></span><br><span class="line">    p = (char *) &amp;i;</span><br><span class="line">    //小端</span><br><span class="line">    <span class="keyword">if</span> (*p == 0x44) <span class="built_in">return</span> 0;</span><br><span class="line">    //大端</span><br><span class="line">    <span class="built_in">return</span> 1;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
 
 	
-	    <div class="col-md-9">
-	
+	</div>
+  <a type="button" href="/2018/11/22/大小端/#more" class="btn btn-default more">Read More</a>
+</div>
 
-	<div id="top_search"></div>
+	       
+	     </div>
+	     <div>
+	       <center>
+	         <div class="pagination">
+<ul class="pagination">
+	 
+</ul>
+</div>
 
-    
-        <div class="widget">
-			<ul class="tag_box inline list-unstyled">
-			
-				<li><a href="#make">make<span>1</span></a></li>
-			
-				<li><a href="#原理">原理<span>1</span></a></li>
-			
-				<li><a href="#工具">工具<span>4</span></a></li>
-			
-				<li><a href="#目标">目标<span>1</span></a></li>
-			
-			</ul>
-		</div>
-		
-        <div class="archive">
-		    
-		    <h4 class="archive-ul show" data-toggle="collapse" id="make" data-target="#modal-make"> make <b class="caret"></b></h4>
-		    <ul id="modal-make" class="collapse in">
+	       </center>
+	     </div>	
+      
 
-		        
-			        
-		        
-			        
-		   	        <li class="listing-item"><a href="/2018/11/14/nginx构建系统/">nginx构建系统</a></li>
-			        
-		        
-			        
-		        
-			        
-		        
-			        
-		        
-			        
-		        
-			        
-		        
-		   </ul>
-		   
-		    <h4 class="archive-ul show" data-toggle="collapse" id="原理" data-target="#modal-原理"> 原理 <b class="caret"></b></h4>
-		    <ul id="modal-原理" class="collapse in">
+</div> <!-- col-md-9/col-md-12 -->
 
-		        
-			        
-		   	        <li class="listing-item"><a href="/2018/11/22/大小端/">大小端</a></li>
-			        
-		        
-			        
-		        
-			        
-		        
-			        
-		        
-			        
-		        
-			        
-		        
-			        
-		        
-		   </ul>
-		   
-		    <h4 class="archive-ul show" data-toggle="collapse" id="工具" data-target="#modal-工具"> 工具 <b class="caret"></b></h4>
-		    <ul id="modal-工具" class="collapse in">
 
-		        
-			        
-		        
-			        
-		        
-			        
-		   	        <li class="listing-item"><a href="/2018/11/14/make快速入门/">make快速入门</a></li>
-			        
-		        
-			        
-		   	        <li class="listing-item"><a href="/2018/11/14/gcc常见参数整理/">gcc常见参数整理</a></li>
-			        
-		        
-			        
-		   	        <li class="listing-item"><a href="/2018/11/13/使用hexo搭建博客/">使用hexo搭建博客</a></li>
-			        
-		        
-			        
-		   	        <li class="listing-item"><a href="/2018/11/12/valgrind生成调用链/">valgrind生成调用链</a></li>
-			        
-		        
-			        
-		        
-		   </ul>
-		   
-		    <h4 class="archive-ul show" data-toggle="collapse" id="目标" data-target="#modal-目标"> 目标 <b class="caret"></b></h4>
-		    <ul id="modal-目标" class="collapse in">
-
-		        
-			        
-		        
-			        
-		        
-			        
-		        
-			        
-		        
-			        
-		        
-			        
-		        
-			        
-		   	        <li class="listing-item"><a href="/2018/11/06/blog/">blog purpose</a></li>
-			        
-		        
-		   </ul>
-		   
-		   
-        </div>
-    
-
-</div> <!-- col-md-9 -->
-
-   
-	   <div class="col-md-3">
+<div class="col-md-3">
 	<div id="sidebar">
 	
 			
@@ -258,21 +186,21 @@
 		
 			<li><a href="/tags/nginx/">nginx<span>1</span></a></li>
 		
-			<li><a href="/tags/makefile/">makefile<span>1</span></a></li>
-		
-			<li><a href="/tags/valgrind/">valgrind<span>1</span></a></li>
-		
-			<li><a href="/tags/make/">make<span>1</span></a></li>
-		
 			<li><a href="/tags/构建/">构建<span>1</span></a></li>
-		
-			<li><a href="/tags/gcc/">gcc<span>1</span></a></li>
 		
 			<li><a href="/tags/大小端/">大小端<span>1</span></a></li>
 		
-			<li><a href="/tags/blog/">blog<span>1</span></a></li>
+			<li><a href="/tags/makefile/">makefile<span>1</span></a></li>
+		
+			<li><a href="/tags/make/">make<span>1</span></a></li>
+		
+			<li><a href="/tags/gcc/">gcc<span>1</span></a></li>
 		
 			<li><a href="/tags/hexo/">hexo<span>1</span></a></li>
+		
+			<li><a href="/tags/blog/">blog<span>1</span></a></li>
+		
+			<li><a href="/tags/valgrind/">valgrind<span>1</span></a></li>
 		
 		 
 		</ul>
@@ -312,10 +240,9 @@
 	</div> <!-- sidebar -->
 </div> <!-- col-md-3 -->
 
-   
 
-</div> <!-- row-fluid -->
 
+</div>
 	</div>
   </div>
   <div class="container-narrow">
